@@ -4,5 +4,5 @@ import { indentOf } from '../misc/indent-of'
 import { nameOf } from '../misc/name-of'
 
 export function fieldOf({ name, code, comment }: OpcodeBody, offset: number) {
-  return `${commentOf(comment, 4)}${indentOf(offset)}${nameOf(name)} = 0x${code.toString(16).padStart(2, '0')},`
+  return `${commentOf(comment, offset)}${indentOf(offset)}${nameOf(name)} = 0x${code.toString(16).padStart(2, '0')},`
 }
