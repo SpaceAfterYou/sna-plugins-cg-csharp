@@ -42,14 +42,12 @@ export const usePluginState = createGlobalState(() => {
 
   const { data } = useAsyncProjectData()
 
-  watch(() => data.value.opcodeList, async (opcodeList) => {
-    await generateEnum('group', opcodeList, path.value.enum)
-    await generateOpcode(path.value.type.common, path.value.enum, opcodeList)
+  watch(() => data.value.opcodeList, opcodeList => Promise.all([
+    generateEnum('group', opcodeList, path.value.enum),
+    generateOpcode(path.value.type.common, path.value.enum, opcodeList),
 
-    for (const group of opcodeList) {
-      await generateEnum(group.name, group.commandList, path.value.enum)
-    }
-  }, { deep: true })
+    ...opcodeList.map(group => generateEnum(group.name, group.commandList, path.value.enum)),
+  ]), { deep: true })
 
   /**
    * - - -
