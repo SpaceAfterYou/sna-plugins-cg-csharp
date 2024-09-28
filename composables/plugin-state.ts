@@ -1,4 +1,5 @@
 import { useAsyncProjectData } from '@/composables/async-project-data'
+import { generateOpcode } from '../core/common/generate-opcode'
 import { generateEnum } from '../core/enum'
 
 export const usePluginState = createGlobalState(() => {
@@ -41,10 +42,11 @@ export const usePluginState = createGlobalState(() => {
 
   const { data } = useAsyncProjectData()
 
-  watch(data, async (data) => {
-    await generateEnum('group', data.opcodeList, path.value.enum)
+  watch(() => data.value.opcodeList, async (opcodeList) => {
+    await generateEnum('group', opcodeList, path.value.enum)
+    await generateOpcode(path.value.type.common, path.value.enum, opcodeList)
 
-    for (const group of data.opcodeList) {
+    for (const group of opcodeList) {
       await generateEnum(group.name, group.commandList, path.value.enum)
     }
   }, { deep: true })
