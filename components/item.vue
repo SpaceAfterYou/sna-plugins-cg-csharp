@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ConfigPair } from '../types/config-pair'
-import { open } from '@tauri-apps/api/dialog'
+import { open } from '@tauri-apps/plugin-dialog'
 
 const model = defineModel<ConfigPair>({ required: true })
 
@@ -21,17 +21,17 @@ async function onChange(title: string, path: string, onChanged: (path: string) =
 
 <template>
   <UiGroup class="space-y-4">
-    <span class="flex justify-between gap-4 items-center">
+    <span class="flex items-center justify-between gap-4">
       <p class="truncate">
         <slot name="name" />
       </p>
 
-      <small class="text-rose-300 truncate">
+      <small class="truncate text-rose-300">
         <slot name="hint" />
       </small>
     </span>
 
-    <UiButton class="text-amber-300 w-full" size="small" @click="onChange('Select enum path', model.path, (e) => model.path = e)">
+    <UiButton class="w-full text-amber-300" size="small" @click="onChange('Select enum path', model.path, (e) => model.path = e)">
       {{ placeholder(model.path) }}
     </UiButton>
 
