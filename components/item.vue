@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import type { ConfigPair } from '../types/config-pair'
+
+import { useAsyncProject } from '@/composables/async-project'
 import { open } from '@tauri-apps/plugin-dialog'
 
 const model = defineModel<ConfigPair>({ required: true })
+
+const { disabled } = useAsyncProject()
 
 const placeholder = (value: string) => value || 'unknown'
 
@@ -31,10 +35,10 @@ async function onChange(title: string, path: string, onChanged: (path: string) =
       </small>
     </span>
 
-    <UiButton class="w-full text-amber-300" size="small" @click="onChange('Select enum path', model.path, (e) => model.path = e)">
+    <UiButton :disabled="disabled" class="w-full text-amber-300" size="small" @click="onChange('Select enum path', model.path, (e) => model.path = e)">
       {{ placeholder(model.path) }}
     </UiButton>
 
-    <UiInput v-model="model.namespace" placeholder="namespace" />
+    <UiInput v-model="model.namespace" :disabled="disabled" placeholder="namespace" />
   </UiGroup>
 </template>
